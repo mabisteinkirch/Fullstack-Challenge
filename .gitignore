@@ -1,0 +1,10 @@
+# Env Files
+venv/
+.venv/
+# Editor files
+/poetry.lock
+/pyproject.toml
+/replit_zip_error_log.txt
+/replit.nix
+# Other Files
+__pycache__/
