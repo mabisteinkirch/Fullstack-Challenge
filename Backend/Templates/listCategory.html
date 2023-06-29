@@ -1,0 +1,76 @@
+<br>
+<a href="{{url_for('router.category.createCategory')}}" class="btn btn-secondary btn-xs">New Category</a>
+<hr>
+<div class="row">
+    <label class="form-label" for="form3Example4">Category</label>
+    <fieldset class="form-group col-md-6">
+        <form action="{{url_for('router.category.listCategory')}}" method="GET">
+            <input type="text" class="form-control" name="categoryName" value="{{_categoryName}}">
+    </fieldset>
+    <fieldset class="form-group col-md-4">
+        <button type="submit" class="btn btn-secondary">Filter</button>
+    </fieldset>
+    </form>
+</div>
+<br>
+
+<section class="intro">
+    <div class="mask d-flex align-items-center h-100">
+        <div class="container ">
+            <div class="row justify-content-center">
+                <div class="col-xl">
+                    <div class="bg-white "> <!--table-responsive-->
+                        <table class="table table-sm mb-0 text-xsmall">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">DESCRIPTION</th>
+                                    <th scope="col">STATUS</th>
+                                    <th scope="col">CREATED DATE</th>
+                                    <th scope="col">UPDATED DATE</th>                                  
+                                    <th scope="col">ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for category in listData['category'].items %}
+                                <tr>
+                                    <td>{{category.id}}</td>
+                                    <td>{{category.description}}</td>
+                                    <td>{{category.status}}</td>
+                                    <td>{{category.createdDate}}</td>
+                                    <td>{{category.updatedDate}}</td>
+                                    <td>
+                                        <a href="update/{{category.id}}" class="btn btn-secondary btn-xs">Edit</a>
+                                        <!--<a href="{{category.id}}/removeUser"
+                                            onclick="return confirm('Deseja realmente excluir esse registro ?')"
+                                            class="btn btn-danger btn-xs">Excluir</a>-->
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<div style="display: flex;">
+    {% if listData['category'].has_prev %}
+    <a href="{{listData['category'].prev_num }}?categoryName={{_categoryName}}"> «Previous |</a>
+    {% else %}
+    <p> «Previous |</p>
+    {% endif %}
+
+    {% if listData['category'].has_next %}
+      {% if listData['page'] == 1 %}
+        <a href="list/{{listData['category'].next_num}}?categoryName={{_categoryName}}">| Next»</a>
+      {% else %}
+        <a href="{{listData['category'].next_num}}?categoryName={{_categoryName}}">| Next»</a>
+       {% endif %}
+    {% else %}
+      <p>| Next»</p>
+    {% endif %}
+</div>
