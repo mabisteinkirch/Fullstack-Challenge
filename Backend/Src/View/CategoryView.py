@@ -11,8 +11,7 @@ Category = Blueprint("category", __name__)
 def listCategory(page):
     _categoryFilter = request.values.get("categoryName")
     if _categoryFilter == "None" or _categoryFilter is None:
-        _categoryFilter = ""
-    #return render_template("listCategory.html",listData=CategoryController.List(page, _categoryFilter), categoryName=_categoryFilter)
+        _categoryFilter = ""   
     return CategoryController.List(page, _categoryFilter)
 
 @Category.route("/create", methods=["GET", "POST"])
@@ -28,11 +27,10 @@ def createCategory():
             if CategoryController.createCategory(
                 _description, _status, _updatedDate, _createdDate
             ):
-                return redirect(url_for("router.category.listCategory"))
+                return True
             else:
                 flash("Categoria já cadastrada", "error")
-    return render_template("createCategory.html")
-
+    return True
 
 @Category.route("/update/<int:id>", methods=['GET', 'POST'])
 def updateCategory(id):

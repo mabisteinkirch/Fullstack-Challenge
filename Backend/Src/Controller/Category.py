@@ -1,8 +1,7 @@
 from Src.Model.DataBase import CategoryDb
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.ext.serializer import dumps
 from setting  import db
-import json
+
 
 
 class CategoryController:

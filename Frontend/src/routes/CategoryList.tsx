@@ -1,5 +1,24 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import Fab from '@mui/material/Fab';
+import EditIcon from '@mui/icons-material/Edit';
+import SearchIcon from '@mui/icons-material/Search';
+import AddIcon from '@mui/icons-material/Add';
+
+import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+import { ThemeProvider, styled } from '@mui/material/styles';
+
+
+import { Button } from '@mui/material';
+
 
 interface Category {
   id: number
@@ -8,6 +27,15 @@ interface Category {
   createdDate: string
   updatedDate: string
 }
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#ccc',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+  flexGrow: 1,
+}));
 
 export default function CategoryList() {
 
@@ -22,23 +50,60 @@ export default function CategoryList() {
   }, [])
   return (
     <div>
-      <br />
-      <a href="{{url_for('router.category.createCategory')}}" className="btn btn-secondary btn-xs">New Category</a>
-      <hr />
-      <div className="row">
-        <label className="form-label" htmlFor="form3Example4">Category</label>
+      <h1 >Category</h1>
+      <Box sx={{ width: 550 }}>
+        <Stack direction="row" useFlexGap flexWrap="wrap">
+          <Item><h3 >New</h3>
+            <Fab color="primary" size="small" aria-label="create" href="create/{{category.id}}">
+              <AddIcon />
+            </Fab></Item>
+          <Item><form action="{{url_for('router.category.listCategory')}}" method="GET">
+            <h3 >Filter</h3>
+            <input type="text" className="form-control" name="categoryName" value="" />
 
-        <form action="{{url_for('router.category.listCategory')}}" method="GET">
-          <input type="text" className="form-control" name="categoryName" value="{{_categoryName}}" />
-
-          <fieldset className="form-group col-md-4">
+            {/* <fieldset className="form-group col-md-4">
             <button type="submit" className="btn btn-secondary">Filter</button>
-          </fieldset>
-        </form>
-      </div>
-      <br />
+          </fieldset> */}
 
-      <section className="intro">
+
+            <Fab color="primary" size="small" aria-label="edit" href="update/{{category.id}}">
+              <SearchIcon />
+            </Fab>
+            <br /><br /><br />
+          </form></Item>
+          <Item> <TableContainer component={Paper}>
+            <Table size="small" aria-label="a dense table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Description</TableCell>
+                  <TableCell align="right">Status</TableCell>
+                  <TableCell align="center">Created Date</TableCell>
+                  <TableCell align="center">Updated Date</TableCell>
+                  <TableCell align="right">Edit</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {!categories ? "loading..." : categories.map((category) => {
+                  return (
+                    <TableRow key={category.id}>
+                      <TableCell >{category.description}</TableCell>
+                      <TableCell >{category.status}</TableCell>
+                      <TableCell >{category.createdDate}</TableCell>
+                      <TableCell >{category.updatedDate}</TableCell>
+                      <Fab color="primary" size="small" aria-label="edit" href="update/{{category.id}}">
+                        <EditIcon />
+                      </Fab>
+                    </TableRow>)
+                })}
+              </TableBody>
+            </Table>
+
+          </TableContainer></Item>
+        </Stack>
+      </Box>
+
+
+      {/* <section className="intro">
         <div className="mask d-flex align-items-center h-100">
           <div className="container ">
             <div className="row justify-content-center">
@@ -77,7 +142,7 @@ export default function CategoryList() {
           </div>
         </div>
 
-      </section>
+      </section> */}
 
       {/* <div style="display: flex;">
           {% if listData['category'].has_prev %}
@@ -96,6 +161,12 @@ export default function CategoryList() {
             <p>| Next»</p>
           {% endif %}
       </div> */}
+
+
     </div>
   );
 }
+
+
+
+

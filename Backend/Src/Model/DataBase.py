@@ -38,3 +38,6 @@ class EmployeeDb(db.Model):
     self.status = _status
     self.updatedDate = _updatedDate
     self.createdDate = _createdDate
+
+  def as_dict(self):
+    return {c.name: getattr(self, c.name) for c in self.__table__.columns}
