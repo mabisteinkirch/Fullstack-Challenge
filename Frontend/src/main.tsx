@@ -9,6 +9,7 @@ import Root from "./routes/root";
 import CategoryList from "./routes/CategoryList";
 import CategoryForm from "./routes/CategoryForm";
 import EmployeeList from "./routes/EmployeeList";
+import EmployeeForm from "./routes/EmployeeForm";
  import Home from "./routes/Home";
 import { AppThemeProvider } from './contexts';
 
@@ -41,6 +42,11 @@ const router = createBrowserRouter([
   {
     path: "/employee/list",
     element: <EmployeeList />,
+  },
+
+  {
+    path: "/employee/create",
+    element: <EmployeeForm />,
   },
 ]);
 

@@ -54,7 +54,7 @@ export default function CategoryList() {
   }, [description, categories])
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:5000/category/list')
+    axios.get('http://127.0.0.1:5000/categories/')
       .then(function (response) {
         // handle success
         setCategories(response.data.categories)

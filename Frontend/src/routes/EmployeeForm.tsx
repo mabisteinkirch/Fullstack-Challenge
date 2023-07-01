@@ -6,12 +6,12 @@ import Paper from '@material-ui/core/Paper';
 import { Button, Switch, FormControl, FormLabel, Input, Stack, styled, FormControlLabel, Alert } from '@mui/material';
 import { useParams, useNavigate} from 'react-router-dom';
 
-interface CategoryFormProps {
+interface EmployeeFormProps {
     //optional
    isEdit?: boolean
   }
 
-export default function CategoryForm({isEdit}:CategoryFormProps) {
+export default function EmployeeForm({isEdit}:EmployeeFormProps) {
     const navigate = useNavigate();
 
 
@@ -20,20 +20,26 @@ export default function CategoryForm({isEdit}:CategoryFormProps) {
      useEffect(() => {
         if (!isEdit)
             return
-       axios.get('http://127.0.0.1:5000/category/list')
+       axios.get('http://127.0.0.1:5000/employee/list')
          .then(function (response) {
            // handle success
-           const categories = response.data.categories
-           const category = categories.find ((cat)=> {
+           const employees = response.data.employees
+           const employee = employees.find ((cat)=> {
                 return cat.id === parseInt (id, 10)
            })
-           setDescription (category.description)
-           setStatus (category.status)
+           setName (employee.name)
+           setPhone (employee.phone)
+           setEmail (employee.email)
+           setCategory (employee.id_category)
+           setStatus (employee.status)
          })
      }, [])
 
     //empty string 
-    const [description, setDescription] = useState('')
+    const [name, setName] = useState('')
+    const [phone, setPhone] = useState('')
+    const [email, setEmail] = useState('')
+    const [category, setCategory] = useState('')
     const [status, setStatus] = useState(true)
     const [errors, setErrors] = useState<string | null>(null)
     const [success, setSuccess] = useState<boolean | null>(null)
@@ -45,8 +51,8 @@ export default function CategoryForm({isEdit}:CategoryFormProps) {
         e.preventDefault();
 
 
-        const params = { description, status }
-        const url = isEdit ? `http://127.0.0.1:5000/category/update/${id}` : 'http://127.0.0.1:5000/category/create'
+        const params = { name, phone, status }
+        const url = isEdit ? `http://127.0.0.1:5000/employee/update/${id}` : 'http://127.0.0.1:5000/employee/create'
 
   
         axios.post(url, params)
@@ -55,7 +61,7 @@ export default function CategoryForm({isEdit}:CategoryFormProps) {
                 console.log(response)
                 setSuccess (true)
                 setTimeout(()=>{
-                    navigate("/category/list");
+                    navigate("/employee/list");
                 }, 3000)
                 
             }).catch(function (error){
@@ -67,7 +73,7 @@ export default function CategoryForm({isEdit}:CategoryFormProps) {
 
     return (
         <div>
-            <h1>Category</h1>
+            <h1>Employee</h1>
             {
                 errors ? ( 
                     <Alert severity="error">
@@ -78,7 +84,7 @@ export default function CategoryForm({isEdit}:CategoryFormProps) {
             {
                 success ? ( 
                     <Alert severity="success">
-                    Category successfully saved
+                    Employee successfully saved
                 </Alert>)
                : null
             }
@@ -86,13 +92,43 @@ export default function CategoryForm({isEdit}:CategoryFormProps) {
             <form method='POST' onSubmit={handleSubmit}>
                 <Stack spacing={2} alignItems="center">
                     <FormControl>
-                        <FormLabel>Description:</FormLabel>
+                        <FormLabel>Name:</FormLabel>
                         <Input
                             type="text"
-                            name="description"
-                            value={description}
-                            onChange={(e) => { setDescription(e.target.value) }}
+                            name="name"
+                            value={name}
+                            onChange={(e) => { setName(e.target.value) }}
                             required
+                        />
+                    </FormControl>
+                    <FormControl>
+                        <FormLabel>Phone:</FormLabel>
+                        <Input
+                            type="text"
+                            name="phone"
+                            value={phone}
+                            onChange={(e) => { setPhone(e.target.value) }}
+                            
+                        />
+                    </FormControl>
+                    <FormControl>
+                        <FormLabel>Email:</FormLabel>
+                        <Input
+                            type="text"
+                            name="email"
+                            value={email}
+                            onChange={(e) => { setEmail(e.target.value) }}
+                            
+                        />
+                    </FormControl>
+                    <FormControl>
+                        <FormLabel>Category:</FormLabel>
+                        <Input
+                            type="text"
+                            name="category"
+                            value={category}
+                            onChange={(e) => { setCategory(e.target.value) }}
+                            
                         />
                     </FormControl>
                     <FormControl >
