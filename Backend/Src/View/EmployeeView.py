@@ -1,62 +1,56 @@
-from flask import Blueprint, request, flash
-from Src.Controller.Employee import EmployeeController
-from Src.Model.DataBase import EmployeeDb
+from flask import Blueprint, request, render_template, flash, redirect, url_for
 from datetime import datetime
 from pytz import timezone
+from Src.Controller.Employee import EmployeeController
+from Src.Model.DataBase import EmployeeDb
+from flask_api import status
 
-Employee = Blueprint('employee', __name__)
+Employee = Blueprint('employees', __name__)
 
+@Employee.get("/")
+def listEmployee():
+    _employeeFilter = request.values.get("employeeName")
+    if _employeeFilter == "None" or _employeeFilter is None:
+        _employeeFilter = ""   
+    return EmployeeController.List(_employeeFilter)
 
-
-@Employee.route("/", defaults={"page": 1}, methods=["GET"])
-
-def listCategory(page):
-    _categoryFilter = request.values.get("categoryName")
-    if _categoryFilter == "None" or _categoryFilter is None:
-        _categoryFilter = ""
-    #return render_template("listCategory.html",listData=CategoryController.List(page, _categoryFilter), categoryName=_categoryFilter)
-    return EmployeeController.List(page, _categoryFilter)
-
-@Employee.route("/", methods=["POST"])
+@Employee.post("/")
 def createEmployee():
-    _name = request.form.get('name')
-    _phone = request.form.get('phone')
-    _email=request.form.get('email')
-    _id_category = request.form.get('email')
-    _status = request.form.get('status')
+    params = request.json
+    _name = params['name']
+    _phone = params['phone']
+    _email= params['email']
+    _id_category = params['id_category']
+    _status = 1 if params['status'] else 0
     _createdDate = datetime.now(timezone("America/Sao_Paulo")).strftime("%d/%m/%Y %H:%M:%S")
     _updatedDate = _createdDate
-    if request.method == "POST":
-        if any((x is None or len(x) < 1) for x in [_name, _id_category, _status]):
-            flash("Preencha todos os campos do formulário", "error")
+    
+    if any((x is None or x == "") for x in [_name, _id_category, _status]):
+        return {'status': 'error', 'message': 'Fill all oh the fields'} , status.HTTP_400_BAD_REQUEST
+    else:
+        if EmployeeController.createEmployee(
+            _name, _phone, _email, _id_category,_status,_createdDate,_updatedDate
+        ):
+            return {'status': 'success'}
         else:
-            if EmployeeController.createEmployee(
-               _name, _phone, _email, _id_category,_status,_createdDate,_updatedDate
-            ):
-                return True
-            else:
-                flash("Categoria já cadastrada", "error")
-    return True
+            return {'status': 'error', 'message': 'Employee already exists'}, status.HTTP_409_CONFLICT
+    
 
-@Employee.route("/<int:id>", methods=['POST'])
+@Employee.post("/<int:id>")
 def updateEmployee(id):
-  _name = request.form.get('name')
-  _phone = request.form.get('phone')
-  _email=request.form.get('email')
-  _id_category = request.form.get('email')
-  _status = request.form.get('status')
-  _updatedDate = datetime.now(timezone("America/Sao_Paulo")).strftime("%d/%m/%Y %H:%M:%S")
+    params = request.json
+    _name = params['name']
+    _phone = params['phone']
+    _email = params['email']
+    _id_category = params['id_category']
+    _status = 1 if params['status'] else 0  
+    _updatedDate = datetime.now(timezone("America/Sao_Paulo")).strftime("%d/%m/%Y %H:%M:%S")
 
-  _employee = EmployeeDb.query.filter_by(id=id).first()
-  print(_employee.createdDate)
-  if request.method == 'POST': 
-    if any((x is None or len(x)<1) for x in [_name, _id_category, _status]):
-        flash('Preencha todos os campos do formulário', 'error')
+    if _name is None or len(_name) < 1 :
+        return {'status': 'error', 'message': 'Fill all oh the fields'} , status.HTTP_400_BAD_REQUEST
     else:
         if EmployeeController.updateEmployee(id, _name, _phone, _email, _id_category,_status,_updatedDate):
-          return True
+            return {'status': 'success'}
         else:
-          flash('já cadastrado', 'error')
-  return True 
-
-
+            return {'status': 'error', 'message': 'Category already exists'}, status.HTTP_409_CONFLICT
+  

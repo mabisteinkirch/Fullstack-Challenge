@@ -20,7 +20,7 @@ export default function EmployeeForm({isEdit}:EmployeeFormProps) {
      useEffect(() => {
         if (!isEdit)
             return
-       axios.get('http://127.0.0.1:5000/employee/list')
+       axios.get('http://127.0.0.1:5000/employees')
          .then(function (response) {
            // handle success
            const employees = response.data.employees
@@ -30,7 +30,7 @@ export default function EmployeeForm({isEdit}:EmployeeFormProps) {
            setName (employee.name)
            setPhone (employee.phone)
            setEmail (employee.email)
-           setCategory (employee.id_category)
+           setIdCategory (employee.id_category)
            setStatus (employee.status)
          })
      }, [])
@@ -39,7 +39,7 @@ export default function EmployeeForm({isEdit}:EmployeeFormProps) {
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
     const [email, setEmail] = useState('')
-    const [category, setCategory] = useState('')
+    const [id_category, setIdCategory] = useState('')
     const [status, setStatus] = useState(true)
     const [errors, setErrors] = useState<string | null>(null)
     const [success, setSuccess] = useState<boolean | null>(null)
@@ -51,8 +51,8 @@ export default function EmployeeForm({isEdit}:EmployeeFormProps) {
         e.preventDefault();
 
 
-        const params = { name, phone, status }
-        const url = isEdit ? `http://127.0.0.1:5000/employee/update/${id}` : 'http://127.0.0.1:5000/employee/create'
+        const params = { name, phone, email, id_category, status }
+        const url = isEdit ? `http://127.0.0.1:5000/employees/${id}` : 'http://127.0.0.1:5000/employees/'
 
   
         axios.post(url, params)
@@ -125,9 +125,9 @@ export default function EmployeeForm({isEdit}:EmployeeFormProps) {
                         <FormLabel>Category:</FormLabel>
                         <Input
                             type="text"
-                            name="category"
-                            value={category}
-                            onChange={(e) => { setCategory(e.target.value) }}
+                            name="id_category"
+                            value={id_category}
+                            onChange={(e) => { setIdCategory(e.target.value) }}
                             
                         />
                     </FormControl>

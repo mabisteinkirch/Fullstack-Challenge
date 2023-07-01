@@ -93,7 +93,7 @@ export default function CategoryList() {
             <Table size="small" aria-label="a dense table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Description</TableCell>
+                  <TableCell >Description</TableCell>
                   <TableCell >Status</TableCell>
                   <TableCell >Created Date</TableCell>
                   <TableCell >Updated Date</TableCell>

@@ -23,8 +23,7 @@ class EmployeeController:
       return False  
 
 
-  def List(page,_employeeFilter, per_page=5):
-      print(_employeeFilter)
+  def List(_employeeFilter)->str:
       if len(_employeeFilter)<1 :      
         query = EmployeeDb.query.all()
         queryCount = EmployeeDb.query.count()    

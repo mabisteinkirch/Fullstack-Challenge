@@ -25,8 +25,7 @@ class CategoryController:
       return False  
 
     
-  def List(page,_categoryFilter, per_page=5):
-    print(_categoryFilter)
+  def List(_categoryFilter)->str:
     if len(_categoryFilter)<1 :  
       #query =CategoryDb.query.paginate(page=page, per_page=per_page)
       query =CategoryDb.query.all()

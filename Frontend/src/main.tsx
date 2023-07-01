@@ -29,12 +29,12 @@ const router = createBrowserRouter([
     element: <CategoryList />,
   },
 
-   {
-     path: "/category/create",
-     element: <CategoryForm />,
-   },
+  {
+    path: "/category/create",
+    element: <CategoryForm />,
+  },
 
-   {
+  {
     path: "/category/update/:id",
     element: <CategoryForm isEdit={true}/>,
   },
@@ -48,6 +48,12 @@ const router = createBrowserRouter([
     path: "/employee/create",
     element: <EmployeeForm />,
   },
+
+  {
+    path: "/employee/update/:id",
+    element: <EmployeeForm isEdit={true}/>,
+  },
+
 ]);
 
 

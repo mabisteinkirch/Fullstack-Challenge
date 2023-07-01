@@ -50,15 +50,15 @@ export default function EmployeeList() {
    const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>()
 
    useEffect(() => {
-     const newEmployee = employees?.filter((employee)=>{
+     const newEmployees = employees?.filter((employee)=>{
        return employee.name.toLowerCase().trim().replace(/\W+/g, '').includes(name.toLowerCase().trim().replace(/\W+/g, ''))
       
      })
-     setFilteredEmployees(newEmployee)
+     setFilteredEmployees(newEmployees)
    }, [name, employees])
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:5000/employee/list')
+    axios.get('http://127.0.0.1:5000/employees/')
       .then(function (response) {
         // handle success
         setEmployees(response.data.employees)
@@ -97,9 +97,9 @@ export default function EmployeeList() {
             <Table size="small" aria-label="a dense table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Name</TableCell>
+                  <TableCell >Name</TableCell>
                   <TableCell >Phone</TableCell>
-                  <TableCell>E-mail</TableCell>
+                  <TableCell >E-mail</TableCell>
                   <TableCell >Category</TableCell>
                   <TableCell >Status</TableCell>
                   <TableCell >Created Date</TableCell>
@@ -108,7 +108,7 @@ export default function EmployeeList() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                /* {!filteredEmployees ? "loading..." : filteredEmployees.map((employee) => {
+                 {!filteredEmployees ? "loading..." : filteredEmployees.map((employee) => {
                   return (
                     <TableRow key={employee.id}>
                       <TableCell >{employee.name}</TableCell>

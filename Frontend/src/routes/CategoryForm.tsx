@@ -20,7 +20,7 @@ export default function CategoryForm({isEdit}:CategoryFormProps) {
      useEffect(() => {
         if (!isEdit)
             return
-       axios.get('http://127.0.0.1:5000/category/list')
+       axios.get('http://127.0.0.1:5000/categories/')
          .then(function (response) {
            // handle success
            const categories = response.data.categories
@@ -46,7 +46,7 @@ export default function CategoryForm({isEdit}:CategoryFormProps) {
 
 
         const params = { description, status }
-        const url = isEdit ? `http://127.0.0.1:5000/category/update/${id}` : 'http://127.0.0.1:5000/category/create'
+        const url = isEdit ? `http://127.0.0.1:5000/categories/${id}` : 'http://127.0.0.1:5000/categories/'
 
   
         axios.post(url, params)
@@ -56,7 +56,7 @@ export default function CategoryForm({isEdit}:CategoryFormProps) {
                 setSuccess (true)
                 setTimeout(()=>{
                     navigate("/category/list");
-                }, 3000)
+                }, 2000)
                 
             }).catch(function (error){
                 setErrors (error.response.data.message)
