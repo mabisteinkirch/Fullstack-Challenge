@@ -17,10 +17,14 @@ import Box from '@mui/material/Box';
 import { ThemeProvider, styled } from '@mui/material/styles';
 
 
-import { Button, Input } from '@mui/material';
+import { BottomNavigation, BottomNavigationAction, Button, Input } from '@mui/material';
 import { DarkTheme, LightTheme } from "./../theme";
+import AssignmentInd from '@mui/icons-material/AssignmentInd';
+import CategoryIcon from '@mui/icons-material/Category';
 import { Link } from 'react-router-dom';
 import { Container, Typography } from '@material-ui/core';
+
+import * as React from 'react';
 
 interface Employee {
   id: number
@@ -64,8 +68,25 @@ export default function EmployeeList() {
         setEmployees(response.data.employees)
       })
   }, [])
+
+  const [value, setValue] = React.useState(1);
+
+
   return (
     <Container >
+
+      <Box >
+          <BottomNavigation
+            showLabels
+            value={value}
+            onChange={(event, newValue) => {
+              setValue(newValue);
+            }}
+          >
+            <BottomNavigationAction href="/category/list" label="Category" icon={<CategoryIcon />} />
+            <BottomNavigationAction href="/employee/list"  label="Employee" icon={<AssignmentInd />} />
+          </BottomNavigation>
+      </Box>
       
       <Typography variant='h1'>Employee </Typography>
       

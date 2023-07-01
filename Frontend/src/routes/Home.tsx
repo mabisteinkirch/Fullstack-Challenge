@@ -1,31 +1,73 @@
 import axios from 'axios';
-import {Button} from '@mui/material';
-import { AppThemeProvider, useAppThemeContext } from "../contexts/ThemeContexts";
-import { useEffect } from 'react';
-import {ThemeProvider} from '@mui/material';
+import { useEffect, useState } from 'react';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import Fab from '@mui/material/Fab';
+import EditIcon from '@mui/icons-material/Edit';
+import SearchIcon from '@mui/icons-material/Search';
+import AddIcon from '@mui/icons-material/Add';
+
+import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+import { ThemeProvider, styled } from '@mui/material/styles';
+
+
+import { Button, Input } from '@mui/material';
+import { DarkTheme, LightTheme } from "./../theme";
+import { Link } from 'react-router-dom';
+import { Container, Typography } from '@material-ui/core';
+import AssignmentInd from '@mui/icons-material/AssignmentInd';
+import CategoryIcon from '@mui/icons-material/Category';
 
 
 
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#ccc',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+  flexGrow: 1,
+}));
 
-
-export default function Home (){
-  
-   const toogleTheme = useAppThemeContext ();
-
-   useEffect(() => {
-    axios.get('http://127.0.0.1:5000/')      
-  }, [])
-
-   return (
-      
-     <AppThemeProvider>
-
-
-      <Button variant="contained" color="primary">
-             START
-      </Button>
-
-     </AppThemeProvider>
-
-   );
+export default function Home() {
+  return (
+    <Container >
+      <Typography variant='h1'>Home </Typography>
+      <Box >
+        <Stack direction="column" useFlexGap flexWrap="wrap">
+          <Stack direction="row" useFlexGap flexWrap="wrap">
+            <Item>
+              <Typography variant='h3'>Category </Typography>
+              <Link to={`/category/list`}>
+                <Fab color="secondary" size="large">
+                <CategoryIcon />
+                </Fab>
+               </Link>
+            </Item>
+            <Item>
+              <form action="#" method="GET">
+                <Typography variant='h3'>Employee </Typography>
+                <Link to={`/employee/list`}>
+                <Fab color="primary" size="large">
+                <AssignmentInd />
+                </Fab>
+                </Link>
+                <br /><br /><br />
+              </form>
+            </Item>
+          </Stack>
+        </Stack>
+      </Box>
+    </Container>
+  );
 }
+
+
+
+

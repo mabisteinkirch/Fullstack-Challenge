@@ -26,6 +26,7 @@ class EmployeeController:
   def List(_employeeFilter)->str:
       if len(_employeeFilter)<1 :      
         query = EmployeeDb.query.all()
+
         queryCount = EmployeeDb.query.count()    
      
       return {
@@ -34,3 +35,4 @@ class EmployeeController:
         #"page": page,
         #"per_page": per_page
       }
+  

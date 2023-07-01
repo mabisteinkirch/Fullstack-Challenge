@@ -17,10 +17,15 @@ import Box from '@mui/material/Box';
 import { ThemeProvider, styled } from '@mui/material/styles';
 
 
-import { Button, Input } from '@mui/material';
+import { BottomNavigation, BottomNavigationAction, Button, Input } from '@mui/material';
 import { DarkTheme, LightTheme } from "./../theme";
 import { Link } from 'react-router-dom';
 import { Container, Typography } from '@material-ui/core';
+import AssignmentInd from '@mui/icons-material/AssignmentInd';
+import CategoryIcon from '@mui/icons-material/Category';
+
+import * as React from 'react';
+
 
 interface Category {
   id: number
@@ -33,7 +38,7 @@ interface Category {
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#ccc',
   ...theme.typography.body2,
-  padding: theme.spacing(1),
+  padding: theme.spacing(0),
   textAlign: 'center',
   color: theme.palette.text.secondary,
   flexGrow: 1,
@@ -60,17 +65,36 @@ export default function CategoryList() {
         setCategories(response.data.categories)
       })
   }, [])
+
+  const [value, setValue] = React.useState(0);
+
+
   return (
+
     <Container >
-      
-      <Typography variant='h1'>Category </Typography>
+
+      <Box >
+          <BottomNavigation
+            showLabels
+            value={value}
+            onChange={(event, newValue) => {
+              setValue(newValue);
+            }}
+          >
+            <BottomNavigationAction href="/category/list" label="Category" icon={<CategoryIcon />} />
+            <BottomNavigationAction href="/employee/list"  label="Employee" icon={<AssignmentInd />} />
+          </BottomNavigation>
+      </Box>
+  
+     
+      <Typography variant='h1'  >Category </Typography>
       
       <Box >
         <Stack direction="column" useFlexGap flexWrap="wrap">
           <Stack direction="row" useFlexGap flexWrap="wrap">
             <Item>
             <Typography variant='h3'>New </Typography>
-              <Fab color="primary" size="small" aria-label="create" href="create">
+              <Fab color="secondary" size="small" aria-label="create" href="create">
                 <AddIcon />
               </Fab></Item>
             <Item><form action="#" method="GET">
@@ -109,7 +133,7 @@ export default function CategoryList() {
                       <TableCell >{category.createdDate}</TableCell>
                       <TableCell >{category.updatedDate}</TableCell>
                       <Link to={`/category/update/${category.id}`}>
-                      <Fab color="primary" size="small" aria-label="edit" >
+                      <Fab color="secondary" size="small" aria-label="edit" >
                         <EditIcon />
                       </Fab>
                       </Link>
