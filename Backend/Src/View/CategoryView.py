@@ -3,6 +3,7 @@ from datetime import datetime
 from pytz import timezone
 from Src.Controller.Category import CategoryController
 from Src.Model.DataBase import CategoryDb
+from flask_api import status
 
 Category = Blueprint("category", __name__)
 
@@ -14,40 +15,40 @@ def listCategory(page):
         _categoryFilter = ""   
     return CategoryController.List(page, _categoryFilter)
 
-@Category.route("/create", methods=["GET", "POST"])
+@Category.route("/create", methods=["POST"])
 def createCategory():
-    _description = request.form.get('description')
-    _status = request.form.get('status')
+    params = request.json
+    _description = params['description']
+    _status = 1 if params['status'] else 0 
     _createdDate = datetime.now(timezone("America/Sao_Paulo")).strftime("%d/%m/%Y %H:%M:%S")
     _updatedDate = _createdDate
-    if request.method == "POST":
-        if any((x is None or len(x) < 1) for x in [_description, _status]):
-            flash("Preencha todos os campos do formulário", "error")
+
+    if _description is None or len(_description) < 1 :
+        return {'status': 'error', 'message': 'Fill all oh the fields'} , status.HTTP_400_BAD_REQUEST
+    else:
+        if CategoryController.createCategory(
+            _description, _status, _updatedDate, _createdDate
+        ):
+            return {'status': 'success'}
         else:
-            if CategoryController.createCategory(
-                _description, _status, _updatedDate, _createdDate
-            ):
-                return True
-            else:
-                flash("Categoria já cadastrada", "error")
-    return True
+            return {'status': 'error', 'message': 'Category already exists'}, status.HTTP_409_CONFLICT
+ 
 
-@Category.route("/update/<int:id>", methods=['GET', 'POST'])
+@Category.route("/update/<int:id>", methods=['POST'])
 def updateCategory(id):
-  _description = request.form.get('description')
-  _status = request.form.get('status') 
-  _updatedDate = datetime.now(timezone("America/Sao_Paulo")).strftime("%d/%m/%Y %H:%M:%S")
-
-  _category = CategoryDb.query.filter_by(id=id).first()
-  print(_category.createdDate)
-  if request.method == 'POST': 
-    if any((x is None or len(x)<1) for x in [_description, _status]):
-        flash('Preencha todos os campos do formulário', 'error')
+    params = request.json
+    _description = params['description']
+    _status = 1 if params['status'] else 0  
+    _updatedDate = datetime.now(timezone("America/Sao_Paulo")).strftime("%d/%m/%Y %H:%M:%S")
+    _category = CategoryDb.query.filter_by(id=id).first()
+  
+    if _description is None or len(_description) < 1 :
+            return {'status': 'error', 'message': 'Fill all oh the fields'} , status.HTTP_400_BAD_REQUEST
     else:
         if CategoryController.updateCategory(id, _description, _status, _updatedDate):
-          return redirect(url_for('router.category.listCategory'))
+            return redirect(url_for('router.category.listCategory'))
         else:
-          flash('Cartão RFID ou Usuário já cadastrado', 'error')
-  return render_template('updateCategory.html', category=_category) 
+            return {'status': 'error', 'message': 'Category already exists'}, status.HTTP_409_CONFLICT
+  
 
 

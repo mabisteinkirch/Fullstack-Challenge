@@ -8,8 +8,8 @@ Employee = Blueprint('employee', __name__)
 
 
 
-@Employee.route("/list", defaults={"page": 1}, methods=["GET"])
-@Employee.route("/list/<int:page>", methods=["GET"])
+@Employee.route("/", defaults={"page": 1}, methods=["GET"])
+
 def listCategory(page):
     _categoryFilter = request.values.get("categoryName")
     if _categoryFilter == "None" or _categoryFilter is None:
@@ -17,7 +17,7 @@ def listCategory(page):
     #return render_template("listCategory.html",listData=CategoryController.List(page, _categoryFilter), categoryName=_categoryFilter)
     return EmployeeController.List(page, _categoryFilter)
 
-@Employee.route('/create')
+@Employee.route("/", methods=["POST"])
 def createEmployee():
     _name = request.form.get('name')
     _phone = request.form.get('phone')
@@ -38,7 +38,7 @@ def createEmployee():
                 flash("Categoria já cadastrada", "error")
     return True
 
-@Employee.route('/update')
+@Employee.route("/<int:id>", methods=['POST'])
 def updateEmployee(id):
   _name = request.form.get('name')
   _phone = request.form.get('phone')

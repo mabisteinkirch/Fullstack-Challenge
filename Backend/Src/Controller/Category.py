@@ -17,7 +17,7 @@ class CategoryController:
 
   def updateCategory(id, _description, _status, _updatedDate):   
     try:
-      CategoryDb.query.filter_by(id=id).update({'description':_description.upper(),'status':_status.upper(), 'updatedDate':_updatedDate})
+      CategoryDb.query.filter_by(id=id).update({'description':_description.upper(),'status':_status, 'updatedDate':_updatedDate})
       db.session.commit()
       return True
     except IntegrityError:
