@@ -2,13 +2,13 @@ import axios from 'axios';
 import {Button} from '@mui/material';
 import { AppThemeProvider, useAppThemeContext } from "../contexts/ThemeContexts";
 import { useEffect } from 'react';
+import {ThemeProvider} from '@mui/material';
 
 
 
 
 
-
-export const Home = () =>{
+export default function Home (){
   
    const toogleTheme = useAppThemeContext ();
 
@@ -17,10 +17,15 @@ export const Home = () =>{
   }, [])
 
    return (
-    <AppThemeProvider>     
-        {/* <Button variant='contained' color='primary' onClick = {toogleTheme}>
-            Go
-        </Button>      */}
-    </AppThemeProvider>
+      
+     <AppThemeProvider>
+
+
+      <Button variant="contained" color="primary">
+             START
+      </Button>
+
+     </AppThemeProvider>
+
    );
 }

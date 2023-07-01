@@ -7,10 +7,10 @@ import {
 } from "react-router-dom";
 import Root from "./routes/root";
 import CategoryList from "./routes/CategoryList";
-//import CategoryCreate from "./routes/CategoryCreate";
+import CategoryForm from "./routes/CategoryForm";
 import EmployeeList from "./routes/EmployeeList";
-import home from "./routes/home";
-
+ import Home from "./routes/Home";
+import { AppThemeProvider } from './contexts';
 
 
 const router = createBrowserRouter([
@@ -18,20 +18,25 @@ const router = createBrowserRouter([
     path: "/",
     element: <Root />,
   },
-  
-  // {
-  //   path: "/home",
-  //   element: <Home />,
-  // },
+ 
+   {
+    path: "/home",
+     element: <Home />,
+   },
   {
     path: "/category/list",
     element: <CategoryList />,
   },
 
-  // {
-  //   path: "/category/create",
-  //   element: <CategoryCreate />,
-  // },
+   {
+     path: "/category/create",
+     element: <CategoryForm />,
+   },
+
+   {
+    path: "/category/update/:id",
+    element: <CategoryForm isEdit={true}/>,
+  },
 
   {
     path: "/employee/list",
@@ -42,7 +47,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
+     <AppThemeProvider>
     <RouterProvider router={router} />
+    </AppThemeProvider>
   </React.StrictMode>,
 )
 

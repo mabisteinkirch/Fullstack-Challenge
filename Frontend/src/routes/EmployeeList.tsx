@@ -17,7 +17,7 @@ export default function EmployeeList() {
   const [employees, setEmployees] = useState<Employee[]>()
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:5000/employee/list')
+    axios.get('http://127.0.0.1:5000/employees')
       .then(function (response) {
         // handle success
         setEmployees(response.data.employees)
