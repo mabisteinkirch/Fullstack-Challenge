@@ -1,5 +1,5 @@
 from setting import db
-from . import BaseModel
+
 
 class CategoryDb(db.Model):
   __tablename__='categorydb'
@@ -17,6 +17,7 @@ class CategoryDb(db.Model):
     self.createdDate = _createdDate
 
   def as_dict(self):
+    print(self.__table__.columns)
     return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 class EmployeeDb(db.Model):
@@ -40,4 +41,5 @@ class EmployeeDb(db.Model):
     self.createdDate = _createdDate
 
   def as_dict(self):
+    print(self.__table__.columns)
     return {c.name: getattr(self, c.name) for c in self.__table__.columns}
