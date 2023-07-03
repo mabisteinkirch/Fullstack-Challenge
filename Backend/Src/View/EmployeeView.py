@@ -39,7 +39,7 @@ def createEmployee():
             return {'status': 'error', 'message': 'Employee already exists'}, status.HTTP_409_CONFLICT
 
 
-@Employee.post("/<int:id>")
+@Employee.put("/<int:id>")
 def updateEmployee(id):
     params = request.json
     _name = params['name']

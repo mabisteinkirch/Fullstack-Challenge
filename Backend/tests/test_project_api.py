@@ -137,7 +137,7 @@ def test_can_update_employee():
         "id_category": 19,        
         "status": False        
     }
-    response = requests.post(f"{ENDPOINT}/employees/5",json=payload)    
+    response = requests.put(f"{ENDPOINT}/employees/5",json=payload)    
     assert response.status_code == 200
     assert response.json() == {'status': 'success'}
 
@@ -149,7 +149,7 @@ def test_can_update_employee_conflict():
         "id_category": 19,        
         "status": True         
     }
-    response = requests.post(f"{ENDPOINT}/employees/1",json=payload)    
+    response = requests.put(f"{ENDPOINT}/employees/1",json=payload)    
     assert response.status_code == 409
     assert response.json() == {'status': 'error', 'message': 'Category already exists'}
 
@@ -161,7 +161,7 @@ def test_can_update_employee_badRquest():
         "id_category": 19,        
         "status": True        
     }
-    response = requests.post(f"{ENDPOINT}/employees/19",json=payload)    
+    response = requests.put(f"{ENDPOINT}/employees/19",json=payload)    
     assert response.status_code == 400
     assert response.json() == {'status': 'error', 'message': 'Fill all of the fields'}
 
