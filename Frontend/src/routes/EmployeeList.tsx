@@ -1,12 +1,11 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 import Fab from '@mui/material/Fab';
 import EditIcon from '@mui/icons-material/Edit';
 import SearchIcon from '@mui/icons-material/Search';
@@ -22,20 +21,14 @@ import { DarkTheme, LightTheme } from "./../theme";
 import AssignmentInd from '@mui/icons-material/AssignmentInd';
 import CategoryIcon from '@mui/icons-material/Category';
 import { Link } from 'react-router-dom';
-import { Container, Typography } from '@material-ui/core';
+import { Container, Typography } from '@mui/material';
 
 import * as React from 'react';
+import { Employee } from '../types/types';
 
-interface Employee {
-  id: number
-  name: string
-  phone: number
-  email: string
-  id_category: number
-  status: number
-  createdDate: string
-  updatedDate: string
-}
+import axios from '../api'
+
+
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -62,7 +55,7 @@ export default function EmployeeList() {
    }, [name, employees])
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:5000/employees/')
+    axios.get('employees/')
       .then(function (response) {
         // handle success
         setEmployees(response.data.employees)

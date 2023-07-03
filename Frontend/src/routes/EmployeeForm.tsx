@@ -1,10 +1,13 @@
-import axios from 'axios';
+
 import { SyntheticEvent, useEffect, useState } from 'react';
-import Paper from '@material-ui/core/Paper';
+import Paper from '@mui/material/Paper';
 
 
-import { Button, Switch, FormControl, FormLabel, Input, Stack, styled, FormControlLabel, Alert } from '@mui/material';
+import { Button, Switch, FormControl, FormLabel, Input, Stack, styled, FormControlLabel, Alert, Typography } from '@mui/material';
 import { useParams, useNavigate} from 'react-router-dom';
+import { Employee } from '../types/types';
+
+import axios from '../api'
 
 interface EmployeeFormProps {
     //optional
@@ -15,23 +18,23 @@ export default function EmployeeForm({isEdit}:EmployeeFormProps) {
     const navigate = useNavigate();
 
 
-    const {id} = useParams ()
+    const {id} = useParams <{id: string}> ()
 
      useEffect(() => {
         if (!isEdit)
             return
-       axios.get('http://127.0.0.1:5000/employees')
+       axios.get('employees')
          .then(function (response) {
            // handle success
-           const employees = response.data.employees
+           const employees = response.data.employees as Employee[]
            const employee = employees.find ((cat)=> {
-                return cat.id === parseInt (id, 10)
+                return cat.id === parseInt (id ?? '', 10)
            })
-           setName (employee.name)
-           setPhone (employee.phone)
-           setEmail (employee.email)
-           setIdCategory (employee.id_category)
-           setStatus (employee.status)
+           setName (employee?.name ?? '')
+           setPhone (employee?.phone.toString() ?? '')
+           setEmail (employee?.email ?? '')
+           setIdCategory (employee?.id_category.toString() ?? '')
+           setStatus(Boolean (employee?.status) ?? true)
          })
      }, [])
 
@@ -52,7 +55,7 @@ export default function EmployeeForm({isEdit}:EmployeeFormProps) {
 
 
         const params = { name, phone, email, id_category, status }
-        const url = isEdit ? `http://127.0.0.1:5000/employees/${id}` : 'http://127.0.0.1:5000/employees/'
+        const url = isEdit ? `employees/${id}` : 'employees/'
 
   
         axios.post(url, params)
@@ -73,7 +76,7 @@ export default function EmployeeForm({isEdit}:EmployeeFormProps) {
 
     return (
         <div>
-            <h1>Employee</h1>
+            <Typography variant="h2">Employee</Typography>
             {
                 errors ? ( 
                     <Alert severity="error">

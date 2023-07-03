@@ -1,36 +1,38 @@
-import axios from 'axios';
 import { SyntheticEvent, useEffect, useState } from 'react';
-import Paper from '@material-ui/core/Paper';
+import Paper from '@mui/material/Paper';
 
 
-import { Button, Switch, FormControl, FormLabel, Input, Stack, styled, FormControlLabel, Alert } from '@mui/material';
-import { useParams, useNavigate} from 'react-router-dom';
+import { Button, Switch, FormControl, FormLabel, Input, Stack, styled, FormControlLabel, Alert, Typography } from '@mui/material';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Category } from '../types/types';
+
+import axios from '../api'
 
 interface CategoryFormProps {
     //optional
-   isEdit?: boolean
-  }
+    isEdit?: boolean
+}
 
-export default function CategoryForm({isEdit}:CategoryFormProps) {
+export default function CategoryForm({ isEdit }: CategoryFormProps) {
     const navigate = useNavigate();
 
 
-    const {id} = useParams ()
+    const { id } = useParams<{id: string}>()
 
-     useEffect(() => {
+    useEffect(() => {
         if (!isEdit)
             return
-       axios.get('http://127.0.0.1:5000/categories/')
-         .then(function (response) {
-           // handle success
-           const categories = response.data.categories
-           const category = categories.find ((cat)=> {
-                return cat.id === parseInt (id, 10)
-           })
-           setDescription (category.description)
-           setStatus (category.status)
-         })
-     }, [])
+        axios.get('categories/')
+            .then(function (response) {
+                // handle success
+                const categories = response.data.categories as Category[]
+                const category = categories.find((cat) => {
+                    return cat.id === parseInt(id?? '', 10)
+                })
+                setDescription(category?.description ?? '')
+                setStatus(Boolean (category?.status) ?? true)
+            })
+    }, [])
 
     //empty string 
     const [description, setDescription] = useState('')
@@ -46,46 +48,66 @@ export default function CategoryForm({isEdit}:CategoryFormProps) {
 
 
         const params = { description, status }
-        const url = isEdit ? `http://127.0.0.1:5000/categories/${id}` : 'http://127.0.0.1:5000/categories/'
+        const url = isEdit ? `categories/${id}` : 'categories/'
+        
+        if (isEdit) {
+            axios.put(url, params)
+                .then(function (response) {
+                    // handle success
+                    console.log(response)
+                    setSuccess(true)
+                    setTimeout(() => {
+                        navigate("/category/list");
+                    }, 2000)
 
-  
-        axios.post(url, params)
-            .then(function (response) {
-                // handle success
-                console.log(response)
-                setSuccess (true)
-                setTimeout(()=>{
-                    navigate("/category/list");
-                }, 2000)
-                
-            }).catch(function (error){
-                setErrors (error.response.data.message)
-            })
-            
+                }).catch(function (error) {
+                    setErrors(error.response.data.message)
+                })
+        } else {
+            axios.post(url, params)
+                .then(function (response) {
+                    // handle success
+                    console.log(response)
+                    setSuccess(true)
+                    setTimeout(() => {
+                        navigate("/category/list");
+                    }, 2000)
+
+                }).catch(function (error) {
+                    setErrors(error.response.data.message)
+                })
+
+        }
     }
+
 
 
     return (
         <div>
-            <h1>Category</h1>
+            <Typography variant="h2">Category</Typography>
             {
-                errors ? ( 
+                errors ? (
                     <Alert severity="error">
-                    {errors}
-                </Alert>)
-            : null
+                        {errors}
+                    </Alert>)
+                    : null
             }
             {
-                success ? ( 
+                success ? (
                     <Alert severity="success">
-                    Category successfully saved
-                </Alert>)
-               : null
+                        Category successfully saved
+                    </Alert>)
+                    : null
             }
-           
-            <form method='POST' onSubmit={handleSubmit}>
+
+            <form onSubmit={handleSubmit}>
                 <Stack spacing={2} alignItems="center">
-                    <FormControl>
+                {/* <FormControl>
+                       <select>
+                            <option value={category.id}>{category.description}</option>
+                       </select>
+                </FormControl> */}
+                <FormControl>
                         <FormLabel>Description:</FormLabel>
                         <Input
                             type="text"
@@ -105,7 +127,7 @@ export default function CategoryForm({isEdit}:CategoryFormProps) {
 
                         />} label={status ? "Enable" : "Disable"} />
                     </FormControl>
-                    
+
                     <Button type="submit" variant="contained" color="secondary">
                         Send
                     </Button>
@@ -114,3 +136,5 @@ export default function CategoryForm({isEdit}:CategoryFormProps) {
         </div>
     );
 }
+
+

@@ -1,27 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'
+// import './index.css'
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import Root from "./routes/root";
 import CategoryList from "./routes/CategoryList";
 import CategoryForm from "./routes/CategoryForm";
 import EmployeeList from "./routes/EmployeeList";
 import EmployeeForm from "./routes/EmployeeForm";
- import Home from "./routes/Home";
+import Home from "./routes/Home";
 import { AppThemeProvider } from './contexts';
 
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Root />,
-  },
- 
+
    {
-    path: "/home",
+    path: "/",
      element: <Home />,
    },
   {
