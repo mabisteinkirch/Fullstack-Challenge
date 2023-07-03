@@ -1,138 +1,113 @@
-import { SyntheticEvent, useEffect, useState } from 'react';
-import Paper from '@mui/material/Paper';
+import { SyntheticEvent, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
+import {
+  Alert,
+  Button,
+  Container,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Input,
+  Stack,
+  Switch,
+  Typography,
+} from "@mui/material";
 
-import { Button, Switch, FormControl, FormLabel, Input, Stack, styled, FormControlLabel, Alert, Typography } from '@mui/material';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Category } from '../types/types';
-
-import axios from '../api'
+import axios from "../api";
+import { Category } from "../types/types";
 
 interface CategoryFormProps {
-    //optional
-    isEdit?: boolean
+  isEdit?: boolean;
 }
 
 export default function CategoryForm({ isEdit }: CategoryFormProps) {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
 
+  useEffect(() => {
+    if (!isEdit) return;
 
-    const { id } = useParams<{id: string}>()
+    axios
+      .get<{ categories: Category[] }>("categories/")
+      .then(function (response) {
+        const categories = response.data.categories;
+        const category = categories.find((cat) => {
+          return cat.id === parseInt(id ?? "", 10);
+        });
+        setDescription(category?.description ?? "");
+        setStatus(Boolean(category?.status) ?? true);
+      });
+  }, [id, isEdit]);
 
-    useEffect(() => {
-        if (!isEdit)
-            return
-        axios.get('categories/')
-            .then(function (response) {
-                // handle success
-                const categories = response.data.categories as Category[]
-                const category = categories.find((cat) => {
-                    return cat.id === parseInt(id?? '', 10)
-                })
-                setDescription(category?.description ?? '')
-                setStatus(Boolean (category?.status) ?? true)
-            })
-    }, [])
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState(true);
+  const [errors, setErrors] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean | null>(null);
 
-    //empty string 
-    const [description, setDescription] = useState('')
-    const [status, setStatus] = useState(true)
-    const [errors, setErrors] = useState<string | null>(null)
-    const [success, setSuccess] = useState<boolean | null>(null)
+  function handleSubmit(e: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
+    // Prevent the browser from reloading the page
+    e.preventDefault();
 
-    const label = { slotProps: { input: { 'aria-label': 'Status' } } };
+    const params = { description, status };
+    const axiosRequest = isEdit
+      ? axios.put(`categories/${id}`, params)
+      : axios.post("categories/", params);
 
-    function handleSubmit(e: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
-        // Prevent the browser from reloading the page
-        e.preventDefault();
+    axiosRequest
+      .then(function () {
+        setSuccess(true);
+        setTimeout(() => {
+          navigate("/category/list");
+        }, 2000);
+      })
+      .catch(function (error) {
+        setErrors(error.response.data.message);
+      });
+  }
 
+  return (
+    <Container>
+      <Typography variant="h2">Category</Typography>
+      {errors ? <Alert severity="error">{errors}</Alert> : null}
+      {success ? (
+        <Alert severity="success">Category successfully saved</Alert>
+      ) : null}
 
-        const params = { description, status }
-        const url = isEdit ? `categories/${id}` : 'categories/'
-        
-        if (isEdit) {
-            axios.put(url, params)
-                .then(function (response) {
-                    // handle success
-                    console.log(response)
-                    setSuccess(true)
-                    setTimeout(() => {
-                        navigate("/category/list");
-                    }, 2000)
+      <form onSubmit={handleSubmit}>
+        <Stack spacing={2} alignItems="center">
+          <FormControl>
+            <FormLabel>Description:</FormLabel>
+            <Input
+              type="text"
+              name="description"
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+              required
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Status:</FormLabel>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={status}
+                  onChange={() => {
+                    setStatus(!status);
+                  }}
+                />
+              }
+              label={status ? "Enable" : "Disable"}
+            />
+          </FormControl>
 
-                }).catch(function (error) {
-                    setErrors(error.response.data.message)
-                })
-        } else {
-            axios.post(url, params)
-                .then(function (response) {
-                    // handle success
-                    console.log(response)
-                    setSuccess(true)
-                    setTimeout(() => {
-                        navigate("/category/list");
-                    }, 2000)
-
-                }).catch(function (error) {
-                    setErrors(error.response.data.message)
-                })
-
-        }
-    }
-
-    return (
-        <div>
-            <Typography variant="h2">Category</Typography>
-            {
-                errors ? (
-                    <Alert severity="error">
-                        {errors}
-                    </Alert>)
-                    : null
-            }
-            {
-                success ? (
-                    <Alert severity="success">
-                        Category successfully saved
-                    </Alert>)
-                    : null
-            }
-
-            <form onSubmit={handleSubmit}>
-                <Stack spacing={2} alignItems="center">
-                {/* <FormControl>
-                       <select>
-                            <option value={category.id}>{category.description}</option>
-                       </select>
-                </FormControl> */}
-                <FormControl>
-                        <FormLabel>Description:</FormLabel>
-                        <Input
-                            type="text"
-                            name="description"
-                            value={description}
-                            onChange={(e) => { setDescription(e.target.value) }}
-                            required
-                        />
-                    </FormControl>
-                    <FormControl >
-                        <FormLabel>Status:</FormLabel>
-                        <FormControlLabel control={<Switch
-                            {...label}
-
-                            checked={status}
-                            onChange={() => { setStatus(!status) }}
-
-                        />} label={status ? "Enable" : "Disable"} />
-                    </FormControl>
-
-                    <Button type="submit" variant="contained" color="secondary">
-                        Send
-                    </Button>
-                </Stack>
-            </form>
-        </div>
-    );
+          <Button type="submit" variant="contained" color="secondary">
+            Send
+          </Button>
+        </Stack>
+      </form>
+    </Container>
+  );
 }
-
-
