@@ -80,8 +80,6 @@ export default function CategoryForm({ isEdit }: CategoryFormProps) {
         }
     }
 
-
-
     return (
         <div>
             <Typography variant="h2">Category</Typography>

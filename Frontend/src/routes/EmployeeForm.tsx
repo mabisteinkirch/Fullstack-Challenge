@@ -57,8 +57,8 @@ export default function EmployeeForm({isEdit}:EmployeeFormProps) {
         const params = { name, phone, email, id_category, status }
         const url = isEdit ? `employees/${id}` : 'employees/'
 
-  
-        axios.post(url, params)
+        if (isEdit) {
+        axios.put(url, params)
             .then(function (response) {
                 // handle success
                 console.log(response)
@@ -70,6 +70,21 @@ export default function EmployeeForm({isEdit}:EmployeeFormProps) {
             }).catch(function (error){
                 setErrors (error.response.data.message)
             })
+        }else{
+            axios.post(url, params)
+            .then(function (response) {
+                // handle success
+                console.log(response)
+                setSuccess (true)
+                setTimeout(()=>{
+                    navigate("/employee/list");
+                }, 3000)
+                
+            }).catch(function (error){
+                setErrors (error.response.data.message)
+            }) 
+        }
+        
             
     }
 
