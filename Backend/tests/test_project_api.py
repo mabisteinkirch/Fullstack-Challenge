@@ -3,16 +3,16 @@ import random
 
 ENDPOINT = "http://127.0.0.1:5000/"
 
-
+# region Category
 def test_can_call_the_endpoint_categories():
     response = requests.get(f"{ENDPOINT}/categories/")
-    first_category = response.json()['categories'][0]
+    first_category = response.json()['categories'][1]
     expected_result = {
-        "id": 1,
+        "id": 2,
         "description": 'PROFESSORA',
         "status": 1,
-        "updatedDate": '03/07/2023 09:31:28',
-        "createdDate": '27/06/2023 13:39:20'
+        "updatedDate": '04/07/2023 07:48:13',
+        "createdDate": '27/06/2023 13:39:33'
     }
     assert response.status_code == 200
     assert first_category == expected_result
@@ -69,7 +69,7 @@ def test_can_create_category_badRquest():
 
 def test_can_update_category():
     payload = {
-        "description": "Cardiologista",
+        "description": "CARDIOLOGISTA",
         "status": False,
     }
     response = requests.put(f"{ENDPOINT}/categories/3", json=payload)
@@ -79,10 +79,10 @@ def test_can_update_category():
 
 def test_can_update_category_conflict():
     payload = {
-        "description": "Professora",
+        "description": "PROFESSORA",
         "status": True,
     }
-    response = requests.put(f"{ENDPOINT}/categories/2", json=payload)
+    response = requests.put(f"{ENDPOINT}/categories/1", json=payload)
     assert response.status_code == 409
     assert response.json() == {'status': 'error',
                                'message': 'Category already exists'}
@@ -98,6 +98,7 @@ def test_can_update_category_badRquest():
     assert response.json() == {'status': 'error',
                                'message': 'Fill all of the fields'}
 
+# endregion
 
 # region Employee
 
@@ -151,7 +152,7 @@ def test_can_update_employee():
         "id_category": 19,
         "status": False
     }
-    response = requests.put(f"{ENDPOINT}/employees/5",json=payload)
+    response = requests.put(f"{ENDPOINT}/employees/6",json=payload)
     assert response.status_code == 200
     assert response.json() == {'status': 'success'}
 

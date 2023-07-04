@@ -3,10 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from flask_cors import CORS
 
-template_dir = os.path.abspath('./Templates')
-
-app = Flask(__name__,
-            template_folder=template_dir)
+app = Flask(__name__)
 
 CORS(app)
 

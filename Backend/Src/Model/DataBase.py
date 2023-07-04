@@ -20,7 +20,6 @@ class CategoryDb(db.Model):
         print(self.__table__.columns)
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
-
 class EmployeeDb(db.Model):
     __tablename__ = 'employeedb'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

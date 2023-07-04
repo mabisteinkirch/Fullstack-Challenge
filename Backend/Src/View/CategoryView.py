@@ -1,12 +1,11 @@
-from flask import Blueprint, request, render_template, flash, redirect, url_for
+from flask import Blueprint, request
 from datetime import datetime
 from pytz import timezone
 from Src.Controller.Category import CategoryController
-from Src.Model.DataBase import CategoryDb
 from flask_api import status
 
-Category = Blueprint("categories", __name__)
 
+Category = Blueprint("categories", __name__)
 
 @Category.get("/")
 def listCategory():

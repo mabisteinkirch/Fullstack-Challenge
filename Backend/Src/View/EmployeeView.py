@@ -1,12 +1,11 @@
-from flask import Blueprint, request, render_template, flash, redirect, url_for
+from flask import Blueprint, request
 from datetime import datetime
 from pytz import timezone
 from Src.Controller.Employee import EmployeeController
-from Src.Model.DataBase import EmployeeDb
 from flask_api import status
 
-Employee = Blueprint('employees', __name__)
 
+Employee = Blueprint('employees', __name__)
 
 @Employee.get("/")
 def listEmployee():
