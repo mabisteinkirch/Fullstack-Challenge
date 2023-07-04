@@ -60,10 +60,6 @@ The Home screen has a path to the functionalities of the Category and Employee e
 * There is only one type file that that contains the types of both entities.
 * [types](Frontend/src/types/types.ts)
 
-#### Theme
-
-Two different themes were created as the theme for the application, `dark` and `light`.
-
 ## Project Setup
 
 ### Backend
