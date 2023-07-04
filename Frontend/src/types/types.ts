@@ -15,4 +15,5 @@ export interface Employee {
   status: number;
   createdDate: string;
   updatedDate: string;
+  label_category: string;
 }

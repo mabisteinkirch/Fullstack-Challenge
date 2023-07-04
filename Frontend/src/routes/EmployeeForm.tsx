@@ -9,13 +9,16 @@ import {
   FormControlLabel,
   FormLabel,
   Input,
+  InputLabel,
+  MenuItem,
+  Select,
   Stack,
   Switch,
   Typography,
 } from "@mui/material";
 
 import axios from "../api";
-import { Employee } from "../types/types";
+import { Category, Employee } from "../types/types";
 
 interface EmployeeFormProps {
   isEdit?: boolean;
@@ -41,6 +44,14 @@ export default function EmployeeForm({ isEdit }: EmployeeFormProps) {
     });
   }, [id, isEdit]);
 
+  useEffect(() => {
+    axios
+      .get<{ categories: Category[] }>("categories/")
+      .then(function (response) {
+        setCategories(response.data.categories);
+      });
+  }, []);
+
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -48,6 +59,7 @@ export default function EmployeeForm({ isEdit }: EmployeeFormProps) {
   const [status, setStatus] = useState(true);
   const [errors, setErrors] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean | null>(null);
+  const [categories, setCategories] = useState<Category[]>();
 
   function handleSubmit(e: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     // Prevent the browser from reloading the page
@@ -114,16 +126,24 @@ export default function EmployeeForm({ isEdit }: EmployeeFormProps) {
               }}
             />
           </FormControl>
-          <FormControl>
-            <FormLabel>Category:</FormLabel>
-            <Input
-              type="text"
-              name="id_category"
+          <FormControl sx={{ width: 200 }}>
+            <InputLabel id="category">Category</InputLabel>
+            <Select
+              labelId="category"
+              label="category"
               value={id_category}
               onChange={(e) => {
                 setIdCategory(e.target.value);
               }}
-            />
+            >
+              {categories?.map((category) => {
+                return (
+                  <MenuItem value={category.id}>
+                    {category.description}
+                  </MenuItem>
+                );
+              })}
+            </Select>
           </FormControl>
           <FormControl>
             <FormLabel>Status:</FormLabel>

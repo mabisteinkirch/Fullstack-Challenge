@@ -141,7 +141,7 @@ export default function EmployeeList() {
                           <TableCell>{employee.name}</TableCell>
                           <TableCell>{employee.phone}</TableCell>
                           <TableCell>{employee.email}</TableCell>
-                          <TableCell>{employee.id_category}</TableCell>
+                          <TableCell>{employee.label_category}</TableCell>
                           <TableCell>
                             {employee.status ? "Enable" : "Disable"}
                           </TableCell>
