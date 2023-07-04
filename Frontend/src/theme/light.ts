@@ -7,18 +7,18 @@ export const LightTheme = createTheme({
       main: amber[700],
       dark: amber[800],
       light: amber[500],
-      contrastText: "#fffffff",
+      contrastText: "#000",
     },
 
     primary: {
       main: purple[500],
       dark: purple[400],
       light: purple[300],
-      contrastText: "#fffffff",
+      contrastText: "#ffffff",
     },
 
     background: {
-      paper: "#fffffff",
+      paper: "#ffffff",
       default: "#f7f6f3",
     },
   },
