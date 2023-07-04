@@ -16,8 +16,7 @@ class CategoryDb(db.Model):
         self.updatedDate = _updatedDate
         self.createdDate = _createdDate
 
-    def as_dict(self):
-        print(self.__table__.columns)
+    def as_dict(self):        
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 class EmployeeDb(db.Model):
@@ -41,6 +40,5 @@ class EmployeeDb(db.Model):
         self.updatedDate = _updatedDate
         self.createdDate = _createdDate
 
-    def as_dict(self):
-        print(self.__table__.columns)
+    def as_dict(self):      
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}

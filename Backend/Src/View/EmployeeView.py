@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from datetime import datetime
 from pytz import timezone
 from Src.Controller.Employee import EmployeeController
+from Src.Controller.Category import CategoryController
 from flask_api import status
 
 
@@ -12,6 +13,12 @@ def listEmployee():
     _employeeFilter = request.values.get("employeeName")
     if _employeeFilter == "None" or _employeeFilter is None:
         _employeeFilter = ""
+    employees = EmployeeController.List(_employeeFilter)
+    categories = CategoryController.List("")
+
+   
+    
+    
     return EmployeeController.List(_employeeFilter)
 
 

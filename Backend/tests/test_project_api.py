@@ -26,7 +26,7 @@ def test_can_call_the_endpoint_employee():
         "name": 'Lucas',
         "phone": "12997775422",
         "email": "lucas@gmail.com",
-        "id_category": 1,
+        "label_category": "RADIOLOGISTA E",
         "status": 1,
         "updatedDate": '28/06/2023 08:31:46',
         "createdDate": '28/06/2023 08:31:46'

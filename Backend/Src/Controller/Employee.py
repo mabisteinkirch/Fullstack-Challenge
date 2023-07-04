@@ -36,10 +36,25 @@ class EmployeeController:
 
     def List(_employeeFilter) -> str:
         if len(_employeeFilter) < 1:
-            query = EmployeeDb.query.all()
-            queryCount = EmployeeDb.query.count()
+            query = EmployeeDb.query\
+                .join(CategoryDb, EmployeeDb.id_category == CategoryDb.id)\
+                .add_columns(EmployeeDb.name, EmployeeDb.phone, EmployeeDb.email, CategoryDb.description, EmployeeDb.status, EmployeeDb.createdDate, EmployeeDb.updatedDate, EmployeeDb.id)\
+                .filter(EmployeeDb.id_category == CategoryDb.id).all()
+
+            var = []
+
+            for employee in query:
+                var.append({
+                    "createdDate": employee[6],
+                    "email": employee[3],
+                    "id": employee[-1],
+                    "label_category": employee[4],
+                    "name": employee[1],
+                    "phone": employee[2],
+                    "status": employee[5],
+                    "updatedDate": employee[7]
+                })
 
         return {
-            "employees": [row.as_dict() for row in query],
-            "count": queryCount
+            "employees": var
         }
