@@ -67,10 +67,21 @@ The Home screen has a path to the functionalities of the Category and Employee e
 First, create a virtual env to host the project dependencies.
 Install the necessary dependencies with the following commands:
 
+Linux:
+
 ```bash
 cd Backend
 python3 -m venv .venv
 source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Windows:
+
+```bash
+cd Backend
+python3 -m venv .venv
+env\Scripts\activate.bat
 pip install -r requirements.txt
 ```
 
