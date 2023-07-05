@@ -69,6 +69,8 @@ Install the necessary dependencies with the following commands:
 
 ```bash
 cd Backend
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
@@ -86,7 +88,8 @@ pytest -v
 
 ### Frontend
 
-Install the necessary dependencies with the following commands:
+Previously, nodejs has to be installed.
+Then, install the necessary dependencies with the following commands:
 
 ```bash
 cd Frontend
